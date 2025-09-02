@@ -104,5 +104,3 @@ No installations required. Just download and run!
 ## 🌼🌸 Made with Love for Onam 🎉
 
 May this Onam bring joy, color, and togetherness — both offline and online! 🌸✨🌼
-
-ant me to make this README more **formal (like a hackathon project)** or more **festive with emojis and decorative headings** (so it feels like part of an Onam celebration)?
