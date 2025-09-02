@@ -3,8 +3,8 @@
 # Pookalam Pie
 
 ## Basic Details
-### Team Name: Bloom Bytes 🌺
-### Team Name: Sanjana Sujith 🌺
+### Team Name: Bloom Bytes 🌟
+### Team Member: Sanjana Sujith 🌺
 
 ---
 
