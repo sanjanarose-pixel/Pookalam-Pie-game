@@ -1,4 +1,4 @@
-<img width="1907" height="895" alt="Screenshot 2025-09-02 201317" src="https://github.com/user-attachments/assets/78425588-c45e-4c74-b411-e4e3ce8b2e1b" /># Pookalam-Pie-game
+# Pookalam-Pie-game
 
 <img width="1536" height="1024" alt="ChatGPT Image Sep 2, 2025, 07_36_59 PM" src="https://github.com/user-attachments/assets/e494c4cd-dcaf-4b03-b62b-04f87f6d6afe" />
 
