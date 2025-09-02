@@ -1,8 +1,8 @@
-# Pookalam-Pie-game
+<img width="1907" height="895" alt="Screenshot 2025-09-02 201317" src="https://github.com/user-attachments/assets/78425588-c45e-4c74-b411-e4e3ce8b2e1b" /># Pookalam-Pie-game
 
-## Basic Details
 <img width="1536" height="1024" alt="ChatGPT Image Sep 2, 2025, 07_36_59 PM" src="https://github.com/user-attachments/assets/e494c4cd-dcaf-4b03-b62b-04f87f6d6afe" />
 
+## Basic Details
 
 ### Team Name: Bloom Bytes 🌺
 
@@ -79,16 +79,23 @@ No installations required. Just download and run!
 ### Screenshots
 
 ✨ **Welcome Popup**
-*(Instructions & “Continue” button)*
-![Intro Screen](Intropage.png)
+<img width="1919" height="907" alt="Screenshot 2025-09-02 200635" src="https://github.com/user-attachments/assets/d1b3d0f5-9f7b-4d34-86e8-a357d42198ee" />
+*(Instructions on how to play & “Continue” button)*
+
+✨ **Loading Page**
+<img width="1917" height="904" alt="Screenshot 2025-09-02 200711" src="https://github.com/user-attachments/assets/beb71806-5020-43bd-a41c-73b621d117c3" />
+*(Loading screen featuring a dancing avatar)*
 
 🌼 **Design Stage**
+<img width="1919" height="902" alt="Screenshot 2025-09-02 200725" src="https://github.com/user-attachments/assets/e032828f-106a-4b6a-8269-69ac6d2846cc" />
+<img width="1919" height="909" alt="Screenshot 2025-09-02 201301" src="https://github.com/user-attachments/assets/a3f82c91-6ec8-4815-82c4-13b7a2c4e53f" />
 *(Select flowers & decorate your glowing slice)*
-![Design Screen](Design.png)
+
 
 🌸 **Full Pookalam**
+<img width="1907" height="895" alt="Screenshot 2025-09-02 201317" src="https://github.com/user-attachments/assets/1dcfb77c-d8ed-46fc-ba2c-6a4ae13f1cd6" />
+<img width="1919" height="907" alt="Screenshot 2025-09-02 201333" src="https://github.com/user-attachments/assets/b1189a46-e070-4970-8a25-6716d150de7f" />
 *(Your slice mirrored into a complete pookalam with confetti)*
-![Final Pookalam](Final.png)
 
 ---
 
