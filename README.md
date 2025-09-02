@@ -1,14 +1,10 @@
-# Pookalam-Pie-game
-
 <img width="1536" height="1024" alt="ChatGPT Image Sep 2, 2025, 07_36_59 PM" src="https://github.com/user-attachments/assets/e494c4cd-dcaf-4b03-b62b-04f87f6d6afe" />
 
+# Pookalam Pie
+
 ## Basic Details
-
 ### Team Name: Bloom Bytes 🌺
-
-### Team Member
-
-* Team member: **\Sanjana Sujith**
+### Team Name: Sanjana Sujith 🌺
 
 ---
 
