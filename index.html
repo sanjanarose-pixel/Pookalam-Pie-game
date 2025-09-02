@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pookalam Pie</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      /* ---- Independent Radii ---- */
+      --game-radius: 235px;   /* Flower placement circle */
+      --ring-radius: 260px;   /* Orbiting text ring */
+
+      /* ---- Position tweaks ---- */
+      --ring-x: 50%;
+      --ring-y: 50%;
+      --ring-dx: 0px;
+      --ring-dy: 0px;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      width: 100vw;
+      font-family: 'Courgette', cursive, Arial, sans-serif;
+      font-size: 20px;
+      overflow: hidden;
+      background: #fff8dc;
+    }
+
+    /* ---------------- POPUP ---------------- */
+    #popupFull {
+      width: 100%; height: 100%;
+      display: flex; justify-content: center; align-items: center;
+      background: rgba(255, 242, 0, 0.95);
+      border: 10px solid #8b4513;
+      box-shadow: 0 0 30px rgba(255, 140, 0, 0.6), inset 0 0 40px rgba(0,0,0,0.25);
+      text-align: center; flex-direction: column; padding: 30px;
+      position: absolute; top: 0; left: 0; z-index: 10;
+    }
+    #popupContinue {
+  margin-top: 20px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Raleway', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+
+  color: #fff;
+  background: linear-gradient(135deg, #ffeb3b, #ff4081);
+  border: none;
+  border-radius: 50px;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
+}
+
+#popupContinue:hover {
+  background: linear-gradient(135deg, #ff4081, #ffeb3b);
+  box-shadow: 0 6px 20px rgba(255, 64, 129, 0.6);
+  transform: translateY(-2px) scale(1.05);
+}
+
+
+    #gameTitle {
+      position: absolute; top: 10px; width: 100%; text-align: center;
+      font-family: 'Roboto', sans-serif; font-size: 72px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 2px; color: #fff;
+      text-shadow: 0 0 6px rgba(255,255,255,0.6), 0 0 12px rgba(255,255,255,0.4);
+      z-index: 20;
+    }
+
+    /* ---------------- DANCE ---------------- */
+    #danceScreen {
+      display: none; height: 100vh; width: 100vw;
+      justify-content: center; align-items: center; text-align: center;
+      animation: party-time 0.9s infinite;
+      position: absolute; top: 0; left: 0; overflow: hidden; flex-direction: column;
+      color: white; z-index: 9;
+    }
+    @keyframes party-time {
+      0% { background-color: #F9C80E; }
+      25% { background-color: #F86624; }
+      50% { background-color: #EA3546; }
+      75% { background-color: #662E9B; }
+      100% { background-color: #43BCCD; }
+    }
+    .gif-bg {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 100%; max-height: 100%; object-fit: contain; z-index: 1;
+    }
+
+    /* ---------------- GAME ---------------- */
+    #gameContainer {
+      visibility: hidden; opacity: 0; transition: opacity 0.6s ease;
+      width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+    }
+    #container {
+      position: relative; /* important for text ring */
+      display: flex; justify-content: center; align-items: center;
+      height: 100%; width: 100%;
+    }
+    canvas { background: transparent; }
+
+    .panel {
+      position: fixed; top: 50%; right: 20px; transform: translateY(-50%);
+      display: flex; flex-direction: row; gap: 30px; padding: 20px; border-radius: 15px;
+      background: rgba(255,255,255,0); box-shadow: inset 0 0 15px rgba(0, 0, 0, 0), 0 6px 10px rgba(0, 0, 0, 0);
+    }
+    .column { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .panel img { width: 55px; height: 55px; cursor: pointer; border-radius: 50%; transition: 0.2s; }
+    .panel img:hover { outline: 2px solid gold; }
+    .panel button {
+      all: unset; padding: 8px 16px; font-size: 16px; cursor: pointer; text-align: center; display: inline-block;
+      background: white; color: black; border-radius: 6px; border: 1px solid #ccc;
+    }
+    .panel button:hover { background: #eee; }
+
+    /* ---------- Orbiting Text Ring ---------- */
+    .text-ring-wrapper {
+      position: absolute;
+      top: calc(var(--ring-y) + var(--ring-dy));
+      left: calc(var(--ring-x) + var(--ring-dx));
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 5;
+    }
+    .text-ring {
+      --font-size: 16px;
+      --text-color: rgb(243, 237, 237);
+      width: calc(var(--ring-radius) * 2);
+      height: calc(var(--ring-radius) * 2);
+      position: relative; border-radius: 50%;
+      animation: spin 40s linear infinite;
+    }
+    .text-ring span {
+  font-family: 'Pacifico', cursive;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: 0 0;
+  font-size: var(--font-size);
+  color: var(--text-color);
+  white-space: pre;
+}
+
+    @keyframes spin { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
+
+    /* ---------- Badge ---------- */
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap');
+
+
+
+  </style>
+</head>
+<body>
+
+  <!-- Welcome Popup -->
+  <div id="popupFull">
+    <h1>🌸 Let's make a pookalam! 🌸</h1>
+    <p style="text-align: left;">
+      🌼 Select a flower and place it on the pie, by using mouse click 🌼🌺 <br><br><br>
+      🌼 Repeat this process and complete the Pie 🎨 <br><br><br>
+      🌼 When you are ready, press the "See the Magic!" button! 🌸🌈 <br><br><br>
+      🌼 You can now admire your colourful Pookalam! 🌸🌈 <br><br><br>
+    </p>
+    <button id="popupContinue">Continue</button>
+  </div>
+
+  <!-- Dance Screen -->
+  <div id="danceScreen">
+    <img class="gif-bg" src="https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif" alt="Dancing Guy">
+    <audio id="bgMusic" src="onam_song.mp3" loop></audio>
+  </div>
+
+  <!-- Game Screen -->
+<div id="gameContainer" style="display: flex; justify-content: flex-start; align-items: center;">
+  <h1 id="gameTitle" style="display: flex; align-items: center; gap: 15px; margin: 0; margin-left: 500px;">
+    <img src="logo.png" alt="Logo" style="height: 100px; width: auto;">
+    Pookalam Pie
+  </h1>
+</div>
+
+<img src="https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif" 
+     alt="Cool Animated Background" 
+     style="position: absolute; 
+            top: 240px;   /* Y position */
+            left: 90px; /* X position */
+            height: 480px; 
+            width: auto;">
+
+<img src="arrow.png" 
+     alt="Arrow" 
+     style="position: absolute; 
+            top: 360px;   /* Y position */
+            left: 980px;  /* X position */
+            height: 275px; /* size control */
+            width: auto;">
+    <div id="container">
+      <!-- Orbiting Text Ring -->
+      <div class="text-ring-wrapper">
+        <div class="text-ring" id="orbitText"></div>
+      </div>
+
+      <!-- Canvas -->
+      <canvas id="pookalam" width="600" height="600"></canvas>
+    </div>
+
+    <div class="panel">
+      <div class="column">
+        <img src="petgr.png" id="btn1" alt="Flower 1">
+        <img src="petye.png" id="btn2" alt="Flower 2">
+        <img src="petor.png" id="btn3" alt="Flower 3">
+        <img src="petwh.png" id="btn4" alt="Flower 4">
+        <img src="petpu.png" id="btn5" alt="Flower 5">
+        <button id="doneBtn">See the Magic!</button>
+      </div>
+      <div class="column">
+        <img src="blf.png" id="btn6" alt="Flower 6">
+        <img src="pif.png" id="btn7" alt="Flower 7">
+        <img src="ref.png" id="btn8" alt="Flower 8">
+        <img src="whf.png" id="btn9" alt="Flower 9">
+        <img src="yef.png" id="btn10" alt="Flower 10">
+        <button id="clearBtn">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <script>
+    /* -------- TIMELINE -------- */
+    const popupContinue = document.getElementById("popupContinue");
+    const popupFull = document.getElementById("popupFull");
+    const danceScreen = document.getElementById("danceScreen");
+    const bgMusic = document.getElementById("bgMusic");
+    const gameContainer = document.getElementById("gameContainer");
+
+    popupContinue.addEventListener("click", () => {
+      popupFull.style.display = "none";
+      danceScreen.style.display = "flex";
+      bgMusic.play().catch(()=>{});
+
+      setTimeout(() => {
+        danceScreen.style.display = "none";
+        gameContainer.style.visibility = "visible";
+        gameContainer.style.opacity = "1";
+      }, 3000);
+    });
+
+    /* -------- Orbiting Text Ring -------- */
+    const orbitText = document.getElementById("orbitText");
+    const ringRadius = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--ring-radius"));
+    const lyrics = `Kiliye Kiliye 
+Kiliye Kiliye Mani Mani Meghathoppil
+oru Malar Nullaan Pookum Azhakin Azhake
+Kiliye Kiliye Mani Mani Meghathoppil `;
+
+    const chars = lyrics.split("");
+    const step = 360 / chars.length;
+    chars.forEach((ch, i) => {
+      const span = document.createElement("span");
+      span.textContent = ch;
+      span.style.transform = `rotate(${i * step}deg) translateY(-${ringRadius}px)`;
+      orbitText.appendChild(span);
+    });
+
+    /* -------- GAME -------- */
+    const canvas = document.getElementById("pookalam");
+    const ctx = canvas.getContext("2d");
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const gameRadius = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--game-radius"));
+
+    function drawBase() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath(); ctx.arc(centerX, centerY, gameRadius, 0, Math.PI * 2);
+      ctx.fillStyle = "#fff8dc"; ctx.fill();
+
+      ctx.beginPath(); ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, gameRadius, 0, Math.PI/4);
+      ctx.closePath(); ctx.fillStyle="rgba(255,200,0,0.3)";
+      ctx.fill();
+    }
+
+    const flowerImgs = {
+      btn1:"petgr.png", btn2:"petye.png", btn3:"petor.png", btn4:"petwh.png", btn5:"petpu.png",
+      btn6:"blf.png", btn7:"pif.png", btn8:"ref.png", btn9:"whf.png", btn10:"yef.png"
+    };
+
+    const loadedImgs = {};
+    for(let key in flowerImgs){
+      const img = new Image(); img.src = flowerImgs[key]; loadedImgs[key] = img;
+    }
+
+    let selectedImg=null, items=[];
+    Object.keys(flowerImgs).forEach(key=>{
+      document.getElementById(key).addEventListener("click",()=>{ selectedImg=loadedImgs[key]; });
+    });
+
+    canvas.addEventListener("click",(e)=>{
+      if(!selectedImg) return;
+      const rect=canvas.getBoundingClientRect();
+      const x=e.clientX-rect.left, y=e.clientY-rect.top;
+      const dx=x-centerX, dy=y-centerY, dist=Math.hypot(dx,dy);
+      const angle=Math.atan2(dy,dx); const ang=angle<0?angle+2*Math.PI:angle;
+      if(dist<=gameRadius && ang>=0 && ang<=Math.PI/4){
+        items.push({img:selectedImg,x,y}); redraw();
+      }
+    });
+
+    function drawItemsPreview(){ items.forEach(it=>ctx.drawImage(it.img,it.x-20,it.y-20,40,40)); }
+    function drawFinalSlice(slice){ items.forEach(it=>{ ctx.save(); ctx.translate(centerX,centerY); ctx.rotate(slice*Math.PI/4); ctx.drawImage(it.img,it.x-centerX-20,it.y-centerY-20,40,40); ctx.restore(); }); }
+    function animateFinal(){ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.beginPath(); ctx.arc(centerX,centerY,gameRadius,0,Math.PI*2); ctx.fillStyle="#fff8dc"; ctx.fill(); let slice=0; function next(){ drawFinalSlice(slice); slice++; if(slice<8)setTimeout(next,400); else triggerConfetti(); } next(); }
+    function redraw(){ drawBase(); drawItemsPreview(); }
+
+    document.getElementById("doneBtn").addEventListener("click",animateFinal);
+    document.getElementById("clearBtn").addEventListener("click",()=>{items=[];redraw();});
+    redraw();
+    /* -------- Background color changing -------- */
+const colors = [
+  "#F9C80E", // golden yellow
+  "#F86624", // vibrant orange
+  "#EA3546", // bold red-pink
+  "#662E9B", // deep purple
+  "#43BCCD"  // teal blue
+];
+let index = 0;
+
+setInterval(() => {
+  if (gameContainer.style.visibility === "visible") {
+    document.body.style.backgroundColor = colors[index];
+    index = (index + 1) % colors.length;
+  }
+}, 570);
+
+
+    /* Confetti (same as before) */
+    class Progress{constructor(p={}){this.timestamp=null;this.duration=p.duration||1000;this.progress=0;this.delta=0;this.isLoop=!!p.isLoop;this.reset();}reset(){this.timestamp=null;}start(n){this.timestamp=n;}tick(n){if(this.timestamp){this.delta=n-this.timestamp;this.progress=Math.min(this.delta/this.duration,1);if(this.progress>=1&&this.isLoop)this.start(n);return this.progress;}return 0;}}
+    class Confetti{constructor(p){this.parent=p.elm||document.body;this.canvas=document.createElement("canvas");this.ctx=this.canvas.getContext("2d");this.width=p.width||this.parent.offsetWidth;this.height=p.height||this.parent.offsetHeight;this.length=p.length||120;this.yRange=p.yRange||this.height*2;this.progress=new Progress({duration:p.duration,isLoop:true});this.rotationRange=typeof p.rotationRange==="number"?p.rotationRange:10;this.speedRange=typeof p.speedRange==="number"?p.speedRange:10;this.sprites=[];this.canvas.style.cssText="display:block;position:absolute;top:0;left:0;pointer-events:none;z-index:2000;";this.render=this.render.bind(this);this.build();this.parent.appendChild(this.canvas);this.progress.start(performance.now());requestAnimationFrame(this.render);}build(){for(let i=0;i<this.length;i++){let c=document.createElement("canvas"),ct=c.getContext("2d");c.width=9;c.height=16;c.position={initX:Math.random()*this.width,initY:-c.height-Math.random()*this.yRange};c.rotation=(this.rotationRange/2)-Math.random()*this.rotationRange;c.speed=(this.speedRange/2)+Math.random()*(this.speedRange/2);ct.fillStyle=["#EF5350","#EC407A","#AB47BC","#7E57C2","#5C6BC0","#42A5F5","#29B6F6","#26C6DA","#26A69A","#66BB6A","#9CCC65","#D4E157","#FFEE58","#FFCA28","#FFA726","#FF7043","#8D6E63","#BDBDBD","#78909C"][(Math.random()*18)|0];ct.fillRect(0,0,9,16);this.sprites.push(c);}}render(n){let pr=this.progress.tick(n);this.canvas.width=this.width;this.canvas.height=this.height;for(let i=0;i<this.length;i++){this.ctx.save();this.ctx.translate(this.sprites[i].position.initX+this.sprites[i].rotation*50*pr,this.sprites[i].position.initY+pr*(this.height+this.yRange));this.ctx.rotate(this.sprites[i].rotation);this.ctx.drawImage(this.sprites[i],-9*Math.abs(Math.sin(pr*2*Math.PI*this.sprites[i].speed))/2,-16/2,9*Math.abs(Math.sin(pr*2*Math.PI*this.sprites[i].speed)),16);this.ctx.restore();}requestAnimationFrame(this.render);}}function triggerConfetti(){const conf=new Confetti({width:window.innerWidth,height:window.innerHeight,length:120,duration:5000});setTimeout(()=>{conf.canvas.remove();},5000);}
+  </script>
+</body>
+</html>
